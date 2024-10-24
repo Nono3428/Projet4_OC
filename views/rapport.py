@@ -17,6 +17,7 @@ class Rapport:
             for joueur in joueurs:
                 print(f"\n=== Détails de {joueur.nom} {joueur.prenom} ===")
                 print(f"Date de naissance: {joueur.date_naissance}")
+                print(f"Identifiant National : {joueur.identifiant}")
                 print("Tournois participés:")
                 for tournoi in joueur.tournois_participes:
                     print(f"- {tournoi['tournoi']} (Points: {tournoi['points']}, Dates: {tournoi['date_debut']} à {tournoi['date_fin']})")
