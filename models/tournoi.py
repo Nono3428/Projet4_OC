@@ -5,7 +5,7 @@ from models.match import Match
 import random
 
 class Tournoi:
-    def __init__(self, nom, lieu, date_debut, date_fin, nombre_tours=4):
+    def __init__(self, nom, lieu, date_debut, date_fin, description, nombre_tours=4):
         self.nom = nom
         self.lieu = lieu
         self.date_debut = datetime.strptime(date_debut, "%Y-%m-%d")
@@ -14,7 +14,7 @@ class Tournoi:
         self.tour_actuel = 0
         self.tours = []
         self.joueurs = []
-        self.description = ""
+        self.description = description
 
     def demarrer_tournoi(self, data):
         """Démarre le tournoi en générant les tours."""

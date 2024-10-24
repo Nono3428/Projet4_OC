@@ -9,8 +9,8 @@ class TournoiController:
         self.fichier_tournois = fichier_tournois
         self.tournois = self.charger_tournois(fichier_tournois)
 
-    def ajouter_tournoi(self, nom, lieu, date_debut, date_fin, nombre_tours=4):
-        tournoi = Tournoi(nom, lieu, date_debut, date_fin, nombre_tours)
+    def ajouter_tournoi(self, nom, lieu, date_debut, date_fin, description, nombre_tours=4):
+        tournoi = Tournoi(nom, lieu, date_debut, date_fin, description, nombre_tours)
         self.tournois.append(tournoi)
         self.sauvegarder_tournois()
         Rapport.afficher_message(f"Tournoi {nom} ajouté avec succès.")

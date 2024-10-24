@@ -35,7 +35,8 @@ class MainController:
                 lieu = input("Lieu : ")
                 date_debut = input("Date de début (YYYY-MM-DD) : ")
                 date_fin = input("Date de fin (YYYY-MM-DD) : ")
-                self.tournoi_controller.ajouter_tournoi(nom, lieu, date_debut, date_fin)
+                description = input("Faire une desciption du tournoi : ")
+                self.tournoi_controller.ajouter_tournoi(nom, lieu, date_debut, date_fin, description)
             elif choix == "4":
                 # Liste des tournois
                 self.tournoi_controller.afficher_tournois()
