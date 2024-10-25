@@ -42,8 +42,11 @@ class JoueursController:
                 return joueur
         return None
 
-    def afficher_joueurs(self):
-        Rapport.afficher_joueurs(self.joueurs)    
+    # def afficher_joueurs(self):
+    #     Rapport.afficher_joueurs(self.joueurs)    
     
-    def afficher_details_joueurs(self):
-        Rapport.afficher_details_joueur(self.joueurs)
+    # def afficher_details_joueurs(self):
+    #     Rapport.afficher_details_joueur(self.joueurs)
+
+    def listes_joueurs(self):
+        Rapport.afficher_listes_joueurs(self.joueurs)

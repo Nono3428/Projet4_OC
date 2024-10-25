@@ -27,3 +27,20 @@ class Menu:
     def selectionner_option(self):
         choix = input("Veuillez sélectionner une option : ")
         return choix
+
+
+    def menu_creer_joueurs(self, joueurs_controller):
+        nom = input("Nom du joueur : ")
+        prenom = input("Prènom du joueur : ")
+        date_naissance = input("Date de naissance : ")
+        identifiant = input("Identifiant national : ")
+        joueurs_controller.ajouter_joueur(nom, prenom, date_naissance, identifiant)
+
+
+    def menu_creer_tournoi(self, tournoi_controller):
+        nom = input("Nom du tournoi : ")
+        lieu = input("Lieu : ")
+        date_debut = input("Date de début (YYYY-MM-DD) : ")
+        date_fin = input("Date de fin (YYYY-MM-DD) : ")
+        description = input("Faire une desciption du tournoi : ")
+        tournoi_controller.ajouter_tournoi(nom, lieu, date_debut, date_fin, description)
