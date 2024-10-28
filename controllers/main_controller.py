@@ -18,28 +18,28 @@ class MainController:
 
             if choix == "1":
                 # Ajouter un joueur
-                # nom = input("Nom du joueur : ")
-                # prenom = input("Prènom du joueur : ")
-                # date_naissance = input("Date de naissance : ")
-                # identifiant = input("Identifiant national : ")
-                # self.joueurs_controller.ajouter_joueur(nom, prenom, date_naissance, identifiant)
+                # # nom = input("Nom du joueur : ")
+                # # prenom = input("Prènom du joueur : ")
+                # # date_naissance = input("Date de naissance : ")
+                # # identifiant = input("Identifiant national : ")
+                # # self.joueurs_controller.ajouter_joueur(nom, prenom, date_naissance, identifiant)
                 self.menu.menu_creer_joueurs(self.joueurs_controller)
             elif choix == "2":
                 # Liste des joueurs
-                    # if input("Voulez vous une liste détaillées des joueurs (oui/non): ") == "oui":
-                    #     self.joueurs_controller.afficher_details_joueurs()
-                    # else:
-                    #     self.joueurs_controller.afficher_joueurs()
+                    # # if input("Voulez vous une liste détaillées des joueurs (oui/non): ") == "oui":
+                    # #     self.joueurs_controller.afficher_details_joueurs()
+                    # # else:
+                    # #     self.joueurs_controller.afficher_joueurs()
                     self.joueurs_controller.listes_joueurs()
             elif choix == "3":
                 # Créer un nouveau tournoi
-                # nom = input("Nom du tournoi : ")
-                # lieu = input("Lieu : ")
-                # date_debut = input("Date de début (YYYY-MM-DD) : ")
-                # date_fin = input("Date de fin (YYYY-MM-DD) : ")
-                # description = input("Faire une desciption du tournoi : ")
-                # self.tournoi_controller.ajouter_tournoi(nom, lieu, date_debut, date_fin, description)
-                self.menu.menu_creer_tournoi(self.tournoi_controller)
+                # # nom = input("Nom du tournoi : ")
+                # # lieu = input("Lieu : ")
+                # # date_debut = input("Date de début (YYYY-MM-DD) : ")
+                # # date_fin = input("Date de fin (YYYY-MM-DD) : ")
+                # # description = input("Faire une desciption du tournoi : ")
+                # # self.tournoi_controller.ajouter_tournoi(nom, lieu, date_debut, date_fin, description)
+                self.menu.menu_creer_tournoi(self.tournoi_controller, self.joueurs_controller)
             elif choix == "4":
                 # Liste des tournois
                 self.tournoi_controller.afficher_tournois()
@@ -60,6 +60,7 @@ class MainController:
                             if joueur:
                                 self.tournoi_controller.ajouter_joueur_tournoi(tournoi, joueur)
                                 Rapport.afficher_message(f"{joueur.nom} {joueur.prenom} ajouté au tournoi.")
+                                self.joueurs_controller.ajouter_tournoi_participees(tournoi, joueur)
                             else:
                                 Rapport.afficher_message("Joueur non trouvé.")
                         elif choix_tournoi == "2":
