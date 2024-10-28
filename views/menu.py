@@ -1,5 +1,5 @@
 from datetime import datetime
-import re
+from views.rapport import Rapport
 
 class Menu:
     def __init__(self):
@@ -31,19 +31,19 @@ class Menu:
         choix = input("Veuillez sélectionner une option : ")
         return choix
 
-
     def menu_creer_joueurs(self, joueurs_controller):
         nom = input("Nom du joueur : ")
         prenom = input("Prènom du joueur : ")
-        date_naissance = joueurs_controller.verifier_dates("Date de naissance (YYYY/MM/DD) : ")
         while True:
+            date_naissance = joueurs_controller.verifier_dates("Date de naissance (YYYY/MM/DD) : ")
+            if date_naissance > datetime.now():
+                Rapport.afficher_message("Erreur : la date de naissance ne peut pas être postérieure à la date actuelle.")
+                continue
             identifiant = input("Identifiant national : ")
-            index, message = joueurs_controller.verifier_id(identifiant)
-            if index:
-                print("ok cbon")
+            index = joueurs_controller.verifier_id(identifiant)
+            if index == True:
                 break
-            else:
-                print(f"Erreur : {message}")
+        date_naissance = date_naissance.strftime("%Y/%m/%d")
         joueurs_controller.ajouter_joueur(nom, prenom, date_naissance, identifiant)
 
 
@@ -52,10 +52,15 @@ class Menu:
         lieu = input("Lieu : ")
         while True:
             date_debut = joueur_controller.verifier_dates("Date de début (YYYY/MM/DD) : ")
+            if date_debut < datetime.now().date():
+                print("Erreur : la date de début ne peut pas être antérieure à la date actuelle.")
+                continue
             date_fin = joueur_controller.verifier_dates("Date de fin (YYYY/MM/DD) : ")
-            if date_fin > date_debut:
-                break
-            else:
+            if date_fin < date_debut:
                 print("Erreur : la date de fin doit être postérieure à la date de début. Veuillez réessayer.")
+            else:
+                break
+        date_debut = date_debut.strftime("%Y/%m/%d")
+        date_fin = date_fin.strftime("%Y/%m/%d")
         description = input("Faire une desciption du tournoi : ")
         tournoi_controller.ajouter_tournoi(nom, lieu, date_debut, date_fin, description)

@@ -8,8 +8,8 @@ class Tournoi:
     def __init__(self, nom, lieu, date_debut, date_fin, description, nombre_tours=4):
         self.nom = nom
         self.lieu = lieu
-        self.date_debut = datetime.strptime(date_debut, "%Y-%m-%d")
-        self.date_fin = datetime.strptime(date_fin, "%Y-%m-%d")
+        self.date_debut = date_debut
+        self.date_fin = date_fin
         self.nombre_tours = nombre_tours
         self.tour_actuel = 0
         self.tours = []
@@ -38,17 +38,14 @@ class Tournoi:
         return {
             "nom": self.nom,
             "lieu": self.lieu,
-            "date_debut": self.date_debut.strftime("%Y-%m-%d"),
-            "date_fin": self.date_fin.strftime("%Y-%m-%d"),
+            "date_debut": self.date_debut,
+            "date_fin": self.date_fin,
             "nombre_tours": self.nombre_tours,
             "tour_actuel" : self.tour_actuel,
             "tours": [tour.to_dict() for tour in self.tours],  # Assurez-vous que la classe Tour a une méthode to_dict aussi
             "joueurs": [joueur.to_dict() for joueur in self.joueurs],  # Assurez-vous que la classe Joueur a une méthode to_dict aussi
             "description": self.description
         }
-
-
-
 
     def demarrer_tournoi(self):
         """Démarre le tournoi en générant les tours."""
@@ -61,8 +58,6 @@ class Tournoi:
 
         # Afficher le classement final après tous les tours
         self.afficher_classement()
-
-
 
     def generer_tour(self):
         """Génère un tour (premier ou suivant) en fonction des scores et des adversaires."""
@@ -100,14 +95,6 @@ class Tournoi:
 
         self.tours.append(tour)
         self.tour_actuel += 1
-
-
-
-
-
-
-
-
 
     # def generer_premier_tour(self):
     #     """Génère le premier tour avec des paires aléatoires."""
