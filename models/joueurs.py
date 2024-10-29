@@ -1,5 +1,5 @@
 import json
-import os
+from views.rapport import Rapport
 
 class Joueur:
     def __init__(self, nom, prenom, date_naissance, identifiant, tournois_participes=[]):
@@ -26,3 +26,35 @@ class Joueur:
             'identifiant': self.identifiant,
             'tournois_participes': self.tournois_participes,
         }
+    
+    def to_dict_tournoi(self):
+        return {
+            'nom': self.nom,
+            'prenom': self.prenom,
+            'date_naissance': self.date_naissance,
+            'identifiant': self.identifiant,
+        }
+
+    @staticmethod
+    def charger_joueurs(fichier):
+        try:
+            with open(fichier, 'r') as f:
+                data = f.read()
+                if data:
+                    joueurs_data = json.loads(data)
+                    return [Joueur(**joueur) for joueur in joueurs_data]
+                else:
+                    Rapport.afficher_message("Le fichier des joueurs est vide. Aucun joueur chargé.")
+                    return []
+        except FileNotFoundError:
+            Rapport.afficher_message("Le fichier des joueurs n'a pas été trouvé.")
+            return []
+        except json.JSONDecodeError:
+            Rapport.afficher_message("Erreur lors de la lecture du fichier JSON des joueurs.")
+            return []
+
+    @staticmethod
+    def sauvegarder_joueurs(joueurs, fichier_joueurs):
+        with open(fichier_joueurs, 'w') as f:
+            json.dump([joueur.to_dict() for joueur in joueurs], f, indent=4)
+        Rapport.afficher_message("Les joueurs ont été sauvegardés avec succès.")
