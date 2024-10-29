@@ -36,7 +36,7 @@ class Menu:
         prenom = input("Prènom du joueur : ")
         while True:
             date_naissance = joueurs_controller.verifier_dates("Date de naissance (YYYY/MM/DD) : ")
-            if date_naissance > datetime.now():
+            if date_naissance > datetime.now().date():
                 Rapport.afficher_message("Erreur : la date de naissance ne peut pas être postérieure à la date actuelle.")
                 continue
             identifiant = input("Identifiant national : ")
