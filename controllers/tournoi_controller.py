@@ -121,6 +121,9 @@ class TournoiController:
                         match.definir_score(0.5, 0.5)  # 0.5 point pour chaque joueur
                         print(f"Match nul entre {joueur1.nom} {joueur1.prenom} et {joueur2.nom} {joueur2.prenom}")
 
+                    joueur1.mettre_a_jour_points_tournoi(tournoi.nom, tournoi.scores[joueur1.identifiant])
+                    joueur2.mettre_a_jour_points_tournoi(tournoi.nom, tournoi.scores[joueur2.identifiant])
+
                     break
 
                 except ValueError:
