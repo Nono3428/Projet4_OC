@@ -1,3 +1,5 @@
+from models.joueurs import Joueur
+from models.match import Match
 class Tour:
     def __init__(self, numero):
         self.numero = numero
@@ -11,3 +13,14 @@ class Tour:
             "numero": self.numero,
             "matchs": [match.to_dict() for match in self.matchs]
         }
+    
+    def from_dict(self, data):
+        """Remplit l'instance actuelle avec les données fournies."""
+        self.numero = data['numero']
+        self.matchs = []
+        for match_data in data.get('matchs', []):
+            joueur1 = Joueur(match_data['joueur1'], "", "", match_data['joueur1'])  # Créez le joueur à partir de l'identifiant
+            joueur2 = Joueur(match_data['joueur2'], "", "", match_data['joueur2'])  # Même ici
+            match = Match(joueur1, joueur2)
+            match.score = match_data.get('score')  # Assignez le score si présent
+            self.ajouter_match(match)
