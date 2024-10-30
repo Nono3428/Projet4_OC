@@ -68,7 +68,7 @@ class Rapport:
         print(f"Nombre de tours : {tournoi.nombre_tours}")
         print(f"Tour courant : {tournoi.tour_actuel}")
         print(f"Description : {tournoi.description}")
-        Rapport.afficher_listes_joueurs(tournoi.joueurs)
+        Rapport.afficher_joueurs(tournoi.joueurs)
 
     @staticmethod
     def afficher_message(message):
