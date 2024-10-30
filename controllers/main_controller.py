@@ -58,7 +58,8 @@ class MainController:
                             self.tournoi_controller.demarrer_tournoi(tournoi)
                         elif choix_tournoi == "5":
                             # Afficher résultats
-                            self.tournoi_controller.afficher_tournois()
+                            Rapport.afficher_tours_et_matchs(tournoi)
+                            Rapport.afficher_classement(tournoi)
                         elif choix_tournoi == "6":
                             tournoi.ajouter_description()
                         elif choix_tournoi == "0":
