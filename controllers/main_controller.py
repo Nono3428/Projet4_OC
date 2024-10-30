@@ -43,8 +43,6 @@ class MainController:
                             joueur = self.joueurs_controller.rechercher_joueur(joueur_identifiant)
                             if joueur:
                                 self.tournoi_controller.ajouter_joueur_tournoi(tournoi, joueur)
-                                Rapport.afficher_message(f"{joueur.nom} {joueur.prenom} ajouté au tournoi.")
-                                self.joueurs_controller.ajouter_tournoi_participees(tournoi, joueur)
                             else:
                                 Rapport.afficher_message("Joueur non trouvé.")
                         elif choix_tournoi == "2":
@@ -55,7 +53,10 @@ class MainController:
                             Rapport.afficher_details_tournoi(tournoi)
                         elif choix_tournoi == "4":
                             # Démarer tournoi
-                            self.tournoi_controller.demarrer_tournoi(tournoi)
+                            if (tournoi.tour_actuel == tournoi.nombre_tours):
+                                Rapport.afficher_message("Le tournoi est déjà terminer")
+                            else:
+                                self.tournoi_controller.demarrer_tournoi(tournoi)
                         elif choix_tournoi == "5":
                             # Afficher résultats
                             Rapport.afficher_tours_et_matchs(tournoi)
