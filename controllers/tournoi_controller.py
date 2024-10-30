@@ -13,12 +13,21 @@ class TournoiController:
     def ajouter_tournoi(self, nom, lieu, date_debut, date_fin, description, nombre_tours=4):
         tournoi = Tournoi(nom, lieu, date_debut, date_fin, description, nombre_tours)
         self.tournois.append(tournoi)
-        Tournoi.sauvegarder_tournois(self.tournois, self.fichier_tournois)
         Rapport.afficher_message(f"Tournoi {nom} ajouté avec succès.")
+        Tournoi.sauvegarder_tournois(self.tournois, self.fichier_tournois)
 
     def ajouter_joueur_tournoi(self, tournoi, joueur):
-        tournoi.ajouter_joueur(joueur)
-        Tournoi.sauvegarder_tournois(self.tournois, self.fichier_tournois)
+        for j in tournoi.joueurs:
+            if j.identifiant == joueur.identifiant:
+                print(f"Le joueur {joueur.prenom} {joueur.nom} est déjà inscrit dans le tournoi.")
+                break
+        else:
+            # Ajoute le joueur si pas encore dans la liste
+            tournoi.ajouter_joueur(joueur)
+            joueur.ajouter_tournoi(tournoi.nom, 0, tournoi.date_debut, tournoi.date_fin)
+            Tournoi.sauvegarder_tournois(self.tournois, self.fichier_tournois)
+            print(f"Joueur {joueur.prenom} {joueur.nom} ajouté au tournoi avec succès.")
+
 
     def selectionner_tournoi(self, nom_tournoi):
         for tournoi in self.tournois:
@@ -40,38 +49,35 @@ class TournoiController:
         """Démarre le tournoi en générant les tours."""
         if len(tournoi.joueurs) >= 6:
             self.generer_tour(tournoi)
-            Rapport.afficher_message(f"Tour {tournoi.tour_actuel} : ")
-
             self.gerer_resultats_tour(tournoi.tours[-1], tournoi)
             tournoi.tour_actuel += 1
-
-            # Afficher le classement final après tous les tours
-            tournoi.afficher_classement()
+            Rapport.afficher_classement(tournoi)
             tournoi.sauvegarder_tournois(self.tournois, self.fichier_tournois)
         else:
             Rapport.afficher_message("Il n'y a pas asser de participants pour le tournoi. Minimum de 6 participants pour lancer le tournoi.")
 
     def generer_tour(self, tournoi):
         """Génère un tour (premier ou suivant) en fonction des scores et des adversaires."""
-        tour = Tour(tournoi.tour_actuel + 1)  # Créer un nouvel objet Tour
+        tour = Tour(tournoi.tour_actuel + 1)
 
         if tournoi.tour_actuel == 0:
             print("Génération du premier tour : mélange aléatoire des joueurs.")
-            random.shuffle(tournoi.joueurs)  # Mélanger les joueurs
+            random.shuffle(tournoi.joueurs)
         else:
             print("Génération du tour suivant : tri des joueurs par score.")
-            tournoi.joueurs.sort(key=lambda j: tournoi.scores.get(j.identifiant, 0), reverse=True)  # Trier les joueurs par score
+            tournoi.joueurs.sort(key=lambda j: tournoi.scores.get(j.identifiant, 0), reverse=True)
 
-        paires_deja_jouees = set()  # Ensemble pour suivre les paires déjà jouées
-        joueurs_non_appaires = tournoi.joueurs.copy()  # Copie de la liste des joueurs
+        paires_deja_jouees = set()
+        joueurs_non_appaires = tournoi.joueurs.copy()
 
-        while len(joueurs_non_appaires) >= 2:  # S'assurer qu'il y a au moins 2 joueurs à apparier
-            joueur1 = joueurs_non_appaires.pop(0)  # Prendre le premier joueur
+        while len(joueurs_non_appaires) >= 2:
+            joueur1 = joueurs_non_appaires.pop(0)
 
             # Trouver un joueur qui n'a pas encore affronté joueur1
             for i, joueur2 in enumerate(joueurs_non_appaires):
                 if (joueur1.identifiant, joueur2.identifiant) not in paires_deja_jouees and \
                    (joueur2.identifiant, joueur1.identifiant) not in paires_deja_jouees:
+
                     # Ajouter la paire à l'ensemble des paires déjà jouées
                     paires_deja_jouees.add((joueur1.identifiant, joueur2.identifiant))
 
@@ -80,33 +86,42 @@ class TournoiController:
                     
                     # Retirer joueur2 de la liste
                     joueurs_non_appaires.pop(i)
-                    break  # Sortir de la boucle une fois que l'adversaire est trouvé
+                    break
 
-        print(f"Type des éléments dans tournoi.tours : {[type(tour) for tour in tournoi.tours]}")
-        tournoi.tours.append(tour)  # Ajouter le tour à la liste des tours
-        print(f"Type des éléments dans tournoi.tours : {[type(tour) for tour in tournoi.tours]}")
+        tournoi.tours.append(tour)
 
-        print(f"Tour {tournoi.tour_actuel + 1} généré avec succès.")
+        print(f"Paires pour le tour {tournoi.tour_actuel + 1} généré avec succès.")
 
     def gerer_resultats_tour(self, tour, tournoi):
         print(f"Gérer les résultats pour le tour {tour.numero} :")
-        for match in tour.matchs:  # Supposons que `tour.matchs` contient tous les matchs du tour
+        for match in tour.matchs:
             joueur1 = match.joueur1
             joueur2 = match.joueur2
             while True:
                 try:
-                    # Saisie des résultats pour le match
-                    score_joueur1 = int(input(f"Entrez le score de {joueur1.nom} {joueur1.prenom} : "))
-                    score_joueur2 = int(input(f"Entrez le score de {joueur2.nom} {joueur2.prenom} : "))
+                    resultat = int(input(f"Qui est le vainqueur pour le match {joueur1.nom} {joueur1.prenom} vs {joueur2.nom} {joueur2.prenom} ? (1 = {joueur1.nom}, 2 = {joueur2.nom}, 0 = Match nul) : "))
                     
-                    # Mise à jour des scores dans le tournoi
-                    tournoi.scores[joueur1.identifiant] = tournoi.scores.get(joueur1.identifiant, 0) + score_joueur1
-                    tournoi.scores[joueur2.identifiant] = tournoi.scores.get(joueur2.identifiant, 0) + score_joueur2
-                    
-                    match.definir_score(score_joueur1, score_joueur2)  # Assure-toi que Match a cette méthode
-                    print(f"Match {joueur1.nom} {joueur1.prenom} ({score_joueur1}) - ({score_joueur2}) {joueur2.nom} {joueur2.prenom} enregistré.")
-                    
-                    break  # Sortir de la boucle une fois que le score a été correctement saisi
-                
+                    if resultat not in [0, 1, 2]:
+                        print("Veuillez entrer un choix valide (1, 2, ou 0).")
+                        continue
+
+                    if resultat == 1:
+                        tournoi.scores[joueur1.identifiant] = tournoi.scores.get(joueur1.identifiant, 0) + 1
+                        tournoi.scores[joueur2.identifiant] = tournoi.scores.get(joueur2.identifiant, 0)
+                        match.definir_score(1, 0)  # 1 point pour joueur1, 0 pour joueur2
+                        print(f"{joueur1.nom} {joueur1.prenom} gagne contre {joueur2.nom} {joueur2.prenom}")
+                    elif resultat == 2:
+                        tournoi.scores[joueur1.identifiant] = tournoi.scores.get(joueur1.identifiant, 0)
+                        tournoi.scores[joueur2.identifiant] = tournoi.scores.get(joueur2.identifiant, 0) + 1
+                        match.definir_score(0, 1)  # 0 point pour joueur1, 1 pour joueur2
+                        print(f"{joueur2.nom} {joueur2.prenom} gagne contre {joueur1.nom} {joueur1.prenom}")
+                    else:  # Cas de match nul
+                        tournoi.scores[joueur1.identifiant] = tournoi.scores.get(joueur1.identifiant, 0) + 0.5
+                        tournoi.scores[joueur2.identifiant] = tournoi.scores.get(joueur2.identifiant, 0) + 0.5
+                        match.definir_score(0.5, 0.5)  # 0.5 point pour chaque joueur
+                        print(f"Match nul entre {joueur1.nom} {joueur1.prenom} et {joueur2.nom} {joueur2.prenom}")
+
+                    break
+
                 except ValueError:
-                    print("Veuillez entrer un nombre valide pour le score.")
+                    print("Veuillez entrer un nombre valide (1 pour victoire joueur1, 2 pour victoire joueur2, 0 pour match nul).")
