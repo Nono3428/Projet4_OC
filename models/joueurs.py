@@ -7,8 +7,7 @@ class Joueur:
         self.prenom = prenom
         self.date_naissance = date_naissance
         self.identifiant = identifiant
-        self.tournois_participes = tournois_participes 
-        self.score = 0
+        self.tournois_participes = tournois_participes
 
     def ajouter_tournoi(self, tournoi_nom, points, tournoi_date_debut, tournoi_date_fin):
         self.tournois_participes.append({
