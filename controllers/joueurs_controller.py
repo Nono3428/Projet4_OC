@@ -27,10 +27,6 @@ class JoueursController:
     def listes_joueurs(self):
         Rapport.afficher_listes_joueurs(self.joueurs)
 
-    def ajouter_tournoi_participees(self, tournoi, joueur):
-        joueur.ajouter_tournoi(tournoi.nom, 0, tournoi.date_debut, tournoi.date_fin)
-        Joueur.sauvegarder_joueurs(self.joueurs, self.fichier_joueurs)
-
     def charger_id_joueurs(self):
         liste = set()
         for joueur in self.joueurs:
