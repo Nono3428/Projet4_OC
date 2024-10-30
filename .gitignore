@@ -1,2 +1,4 @@
 # Environnements virtuel
 .env
+#Dossier python
+_pycache_
