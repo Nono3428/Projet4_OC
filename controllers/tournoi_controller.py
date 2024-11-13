@@ -16,34 +16,29 @@ class TournoiController:
         Rapport.afficher_message(f"Tournoi {nom} ajouté avec succès.")
         Tournoi.sauvegarder_tournois(self.tournois, self.fichier_tournois)
 
-    def ajouter_joueur_tournoi(self, tournoi, joueur):
-        for j in tournoi.joueurs:
-            if j.identifiant == joueur.identifiant:
-                print(f"Le joueur {joueur.prenom} {joueur.nom} est déjà inscrit dans le tournoi.")
+    def ajouter_joueur_tournoi(self, tournoi, joueurs):
+        for joueur in tournoi.joueurs:
+            if joueur.identifiant == joueurs.identifiant:
+                Rapport.afficher_message(f"Le joueur {joueurs.prenom} {joueurs.nom} est déjà inscrit dans le tournoi.")
                 break
         else:
             # Ajoute le joueur si pas encore dans la liste
-            tournoi.ajouter_joueur(joueur)
-            joueur.ajouter_tournoi(tournoi.nom, 0, tournoi.date_debut, tournoi.date_fin)
+            tournoi.ajouter_joueur(joueurs)
+            joueurs.ajouter_tournoi(tournoi.nom, 0, tournoi.date_debut, tournoi.date_fin)
             Tournoi.sauvegarder_tournois(self.tournois, self.fichier_tournois)
-            print(f"Joueur {joueur.prenom} {joueur.nom} ajouté au tournoi avec succès.")
-
+            Rapport.afficher_message(f"Joueur {joueurs.prenom} {joueurs.nom} ajouté au tournoi avec succès.")
 
     def selectionner_tournoi(self, nom_tournoi):
         for tournoi in self.tournois:
             if tournoi.nom == nom_tournoi:
                 return tournoi
-        Rapport.afficher_message("Tournoi non trouvé.")
         return None
 
     def afficher_tournois(self):
         Rapport.afficher_tournois(self.tournois)
 
-    def ajouter_description(self):
-        Tournoi.ajouter_description()
-
-    def afficher_classement(tournoi):
-        Rapport.afficher_classement(tournoi)
+    def ajouter_description(self, tournoi):
+        tournoi.ajouter_description()
 
     def demarrer_tournoi(self, tournoi):
         """Démarre le tournoi en générant les tours."""
@@ -61,10 +56,10 @@ class TournoiController:
         tour = Tour(tournoi.tour_actuel + 1)
 
         if tournoi.tour_actuel == 0:
-            print("Génération du premier tour : mélange aléatoire des joueurs.")
+            Rapport.afficher_message("Génération du premier tour : mélange aléatoire des joueurs.")
             random.shuffle(tournoi.joueurs)
         else:
-            print("Génération du tour suivant : tri des joueurs par score.")
+            Rapport.afficher_message("Génération du tour suivant : tri des joueurs par score.")
             tournoi.joueurs.sort(key=lambda j: tournoi.scores.get(j.identifiant, 0), reverse=True)
 
         paires_deja_jouees = set()
@@ -90,10 +85,10 @@ class TournoiController:
 
         tournoi.tours.append(tour)
 
-        print(f"Paires pour le tour {tournoi.tour_actuel + 1} généré avec succès.")
+        Rapport.afficher_message(f"Paires pour le tour {tournoi.tour_actuel + 1} généré avec succès.")
 
     def gerer_resultats_tour(self, tour, tournoi):
-        print(f"Gérer les résultats pour le tour {tour.numero} :")
+        Rapport.afficher_message(f"Gérer les résultats pour le tour {tour.numero} :")
         for match in tour.matchs:
             joueur1 = match.joueur1
             joueur2 = match.joueur2
@@ -102,24 +97,24 @@ class TournoiController:
                     resultat = int(input(f"Qui est le vainqueur pour le match {joueur1.nom} {joueur1.prenom} vs {joueur2.nom} {joueur2.prenom} ? (1 = {joueur1.nom}, 2 = {joueur2.nom}, 0 = Match nul) : "))
                     
                     if resultat not in [0, 1, 2]:
-                        print("Veuillez entrer un choix valide (1, 2, ou 0).")
+                        Rapport.afficher_message("Veuillez entrer un choix valide (1, 2, ou 0).")
                         continue
 
                     if resultat == 1:
                         tournoi.scores[joueur1.identifiant] = tournoi.scores.get(joueur1.identifiant, 0) + 1
                         tournoi.scores[joueur2.identifiant] = tournoi.scores.get(joueur2.identifiant, 0)
                         match.definir_score(1, 0)  # 1 point pour joueur1, 0 pour joueur2
-                        print(f"{joueur1.nom} {joueur1.prenom} gagne contre {joueur2.nom} {joueur2.prenom}")
+                        Rapport.afficher_message(f"{joueur1.nom} {joueur1.prenom} gagne contre {joueur2.nom} {joueur2.prenom}")
                     elif resultat == 2:
                         tournoi.scores[joueur1.identifiant] = tournoi.scores.get(joueur1.identifiant, 0)
                         tournoi.scores[joueur2.identifiant] = tournoi.scores.get(joueur2.identifiant, 0) + 1
                         match.definir_score(0, 1)  # 0 point pour joueur1, 1 pour joueur2
-                        print(f"{joueur2.nom} {joueur2.prenom} gagne contre {joueur1.nom} {joueur1.prenom}")
+                        Rapport.afficher_message(f"{joueur2.nom} {joueur2.prenom} gagne contre {joueur1.nom} {joueur1.prenom}")
                     else:  # Cas de match nul
                         tournoi.scores[joueur1.identifiant] = tournoi.scores.get(joueur1.identifiant, 0) + 0.5
                         tournoi.scores[joueur2.identifiant] = tournoi.scores.get(joueur2.identifiant, 0) + 0.5
                         match.definir_score(0.5, 0.5)  # 0.5 point pour chaque joueur
-                        print(f"Match nul entre {joueur1.nom} {joueur1.prenom} et {joueur2.nom} {joueur2.prenom}")
+                        Rapport.afficher_message(f"Match nul entre {joueur1.nom} {joueur1.prenom} et {joueur2.nom} {joueur2.prenom}")
 
                     joueur1.mettre_a_jour_points_tournoi(tournoi.nom, tournoi.scores[joueur1.identifiant])
                     joueur2.mettre_a_jour_points_tournoi(tournoi.nom, tournoi.scores[joueur2.identifiant])
@@ -127,4 +122,4 @@ class TournoiController:
                     break
 
                 except ValueError:
-                    print("Veuillez entrer un nombre valide (1 pour victoire joueur1, 2 pour victoire joueur2, 0 pour match nul).")
+                    Rapport.afficher_message("Veuillez entrer un nombre valide (1 pour victoire joueur1, 2 pour victoire joueur2, 0 pour match nul).")
