@@ -1,6 +1,10 @@
 from datetime import datetime
 from views.rapport import Rapport
-
+from rich.console import Console
+from rich.table import Table
+from rich.panel import Panel
+from rich.text import Text
+import rich.box
 class Menu:
     def __init__(self):
         self.options = {
@@ -13,19 +17,62 @@ class Menu:
         }
 
     def afficher_menu(self):
-        print("\n--- Menu Principal ---")
-        for key, value in self.options.items():
-            print(f"{key}: {value}")
+        console = Console()
 
-    def afficher_menu_tournoi(self):
-        print("\n=== Menu Tournoi ===")
-        print("1. Ajouter un joueur")
-        print("2. Afficher les joueurs du tournoi")
-        print("3. Afficher les détails du tournoi")
-        print("4. Démarer le tournoi")
-        print("5. Afficher les résultats des matchs")
-        print("6. Modifier la description du tournoi")
-        print("0. Retour au menu principal")
+        # Titre principal
+        titre = Text("Menu Principal", style="bold cyan", justify="center")
+
+        # Création de la table pour les options
+        table = Table(show_header=True, header_style="bold magenta")
+        table.add_column("Option", justify="center", style="yellow")
+        table.add_column("Action", style="green")
+
+        # Ajout des options dans la table
+        for key, action in self.options.items():
+            table.add_row(key, action)
+
+        # Affichage du titre et de la table dans un panneau
+        panel = Panel.fit(
+            table,
+            title = titre,
+            border_style = "bright_blue",
+            padding=(1, 2)
+        )
+        console.print(panel)
+
+    def afficher_menu_tournoi(self, tournoi_nom):
+        console = Console()
+
+        # Création de la table pour les options avec la bordure correcte
+        table = Table(show_header=True, header_style="bold magenta")
+
+        # Ajouter les colonnes dans la table
+        table.add_column("Option", justify="center", style="yellow")
+        table.add_column("Action", style="green")
+
+        # Options disponibles
+        options = [
+            ("1", "Ajouter un joueur"),
+            ("2", "Afficher les joueurs du tournoi"),
+            ("3", "Afficher les détails du tournoi"),
+            ("4", "Démarrer le tournoi"),
+            ("5", "Afficher les résultats des matchs"),
+            ("6", "Modifier la description du tournoi"),
+            ("0", "Retour au menu principal")
+        ]
+
+        for option in options:
+            table.add_row(option[0], option[1])
+
+        titre = Text(f"Menu Tournoi - {tournoi_nom}", style="bold cyan", justify="center")
+
+        panel = Panel.fit(
+            table,
+            title = titre,
+            border_style = "bright_blue",
+            padding = (1, 2),
+        )
+        console.print(panel)
 
     def selectionner_option(self):
         choix = input("Veuillez sélectionner une option : ")

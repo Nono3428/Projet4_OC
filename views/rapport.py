@@ -1,3 +1,8 @@
+from rich.console import Console
+from rich.table import Table
+from rich.panel import Panel
+from rich.text import Text
+from rich import box
 class Rapport:  
 
     @staticmethod
@@ -6,69 +11,180 @@ class Rapport:
             print("Aucun joueur enregistré.")
             return
         choix = input("Voulez vous une liste détaillées des joueurs (oui/non): ")
+        joueurs_tries = sorted(joueurs, key=lambda joueur: joueur.nom)
         while choix != 'oui' or choix != 'non':
             if choix == "oui":
-                for joueur in joueurs:
-                    print(f"\n=== Détails de {joueur.nom} {joueur.prenom} ===")
-                    print(f"Date de naissance: {joueur.date_naissance}")
-                    print(f"Identifiant National : {joueur.identifiant}")
-                    print("Tournois participés:")
-                    for tournoi in joueur.tournois_participes:
-                        print(f"- {tournoi['tournoi']} (Points: {tournoi['points']}, Dates: {tournoi['date_debut']} à {tournoi['date_fin']})")
-                return    
+                Rapport.afficher_details_joueur(joueurs_tries)
+                return
             elif choix == "non":
-                joueurs_tries = sorted(joueurs, key=lambda joueur: joueur.nom)
-                print("\n=== Liste des Joueurs ===")
-                for joueur in joueurs_tries:
-                    print(f"{joueur.nom} {joueur.prenom} - ID: {joueur.identifiant}")
+                Rapport.liste_joueurs(joueurs_tries)
                 return
             else:       
                 choix = input("Veuillez saisir 'oui' ou 'non' !:")
 
     @staticmethod
-    def afficher_joueurs(joueurs):
-        if not joueurs:
-            print("Aucun joueur enregistré.")
-            return
-        joueurs_tries = sorted(joueurs, key=lambda joueur: joueur.nom)
-        print("\n=== Liste des Joueurs ===")
-        for joueur in joueurs_tries:
-            print(f"{joueur.nom} {joueur.prenom} - ID: {joueur.identifiant}")
+    def liste_joueurs(joueurs):
+        console = Console()
+        table = Table(title="Liste des Joueurs")
+
+        # Ajout des colonnes
+        table.add_column("Nom", style="green")
+        table.add_column("Prénom", style="green")
+        table.add_column("ID", justify="center", style="cyan", no_wrap=True)
+
+        # Ajout des lignes pour chaque joueur
+        for joueur in joueurs:
+            table.add_row(joueur.nom, joueur.prenom, str(joueur.identifiant))
+
+        # Affichage de la table
+        console.print(table)
+
+
+    # @staticmethod
+    # def afficher_joueurs(joueurs):
+    #     if not joueurs:
+    #         print("Aucun joueur enregistré.")
+    #         return
+    #     joueurs_tries = sorted(joueurs, key=lambda joueur: joueur.nom)
+    #     print("\n=== Liste des Joueurs ===")
+    #     for joueur in joueurs_tries:
+    #         print(f"{joueur.nom} {joueur.prenom} - ID: {joueur.identifiant}")
+
+    # @staticmethod
+    # def afficher_details_joueur(joueurs):
+    #     if joueurs:
+    #         for joueur in joueurs:
+    #             print(f"\n=== Détails de {joueur.nom} {joueur.prenom} ===")
+    #             print(f"Date de naissance: {joueur.date_naissance}")
+    #             print(f"Identifiant National : {joueur.identifiant}")
+    #             print("Tournois participés:")
+    #             for tournoi in joueur.tournois_participes:
+    #                 print(f"- {tournoi['tournoi']} (Points: {tournoi['points']}, Dates: {tournoi['date_debut']} à {tournoi['date_fin']})")
+    #     else:
+    #         print("Joueur non trouvé.")
 
     @staticmethod
     def afficher_details_joueur(joueurs):
+        console = Console()
+        
         if joueurs:
-            print('je suis la !!!')
             for joueur in joueurs:
-                print(f"\n=== Détails de {joueur.nom} {joueur.prenom} ===")
-                print(f"Date de naissance: {joueur.date_naissance}")
-                print(f"Identifiant National : {joueur.identifiant}")
-                print("Tournois participés:")
-                for tournoi in joueur.tournois_participes:
-                    print(f"- {tournoi['tournoi']} (Points: {tournoi['points']}, Dates: {tournoi['date_debut']} à {tournoi['date_fin']})")
-        else:
-            print("Joueur non trouvé.")
+                # Crée un tableau pour les détails de chaque joueur
+                # table = Table(title=f"Détails de {joueur.nom} {joueur.prenom}", title_justify="left")
+                table = Table()
+                
+                # Ajoute des colonnes pour les informations personnelles
+                table.add_column(f"Détails de {joueur.nom} {joueur.prenom}" ,style="bold cyan")
+                table.add_column("Valeur", style="bold green")
 
-    @staticmethod
-    def afficher_tournois(tournois):
-        if not tournois:
-            print("Aucun tournoi enregistré.")
-            return
-        print("\n=== Liste des Tournois ===")
-        for tournoi in tournois:
-            print(f"{tournoi.nom} - Lieu: {tournoi.lieu}, Dates: {tournoi.date_debut} à {tournoi.date_fin}")
+                # Ajoute les détails du joueur au tableau
+                table.add_row("Date de naissance", joueur.date_naissance)
+                table.add_row("Identifiant National", joueur.identifiant)
+
+                # Affiche le tableau principal du joueur
+                console.print(table)
+
+                # Crée un autre tableau pour les tournois auxquels le joueur a participé
+                table_tournois = Table(title="Tournois Participés", title_justify="left")
+                table_tournois.add_column("Nom du tournoi", style="yellow")
+                table_tournois.add_column("Points", style="magenta")
+                table_tournois.add_column("Dates", style="cyan")
+
+                # Ajoute les tournois dans le tableau
+                for tournoi in joueur.tournois_participes:
+                    dates = f"{tournoi['date_debut']} à {tournoi['date_fin']}"
+                    table_tournois.add_row(tournoi["tournoi"], str(tournoi["points"]), dates)
+                
+                # Affiche le tableau des tournois pour le joueur actuel
+                console.print(table_tournois)
+                console.print("\n")  # Ajoute un espacement entre les joueurs
+
+        else:
+            console.print("[bold red]Joueur non trouvé.[/bold red]")
+
+    # @staticmethod
+    # def afficher_tournois(tournois):
+    #     if not tournois:
+    #         print("Aucun tournoi enregistré.")
+    #         return
+    #     print("\n=== Liste des Tournois ===")
+    #     for tournoi in tournois:
+    #         print(f"{tournoi.nom} - Lieu: {tournoi.lieu}, Dates: {tournoi.date_debut} à {tournoi.date_fin}")
     
     @staticmethod
+    def afficher_tournois(tournois):
+        console = Console()
+
+        if not tournois:
+            console.print("[bold red]Aucun tournoi enregistré.[/bold red]")
+            return
+
+        # Création de la table avec Rich
+        table = Table(title="Liste des Tournois")
+
+        # Ajout des colonnes
+        table.add_column("Nom", style="cyan", no_wrap=True)
+        table.add_column("Lieu", style="green")
+        table.add_column("Date de début", style="magenta")
+        table.add_column("Date de fin", style="magenta")
+
+        # Ajout des lignes pour chaque tournoi
+        for tournoi in tournois:
+            table.add_row(tournoi.nom, tournoi.lieu, tournoi.date_debut, tournoi.date_fin)
+
+        # Affichage de la table
+        console.print(table)
+
+
+
+    @staticmethod
     def afficher_details_tournoi(tournoi):
-        print("\n=== Détails du Tournoi ===")
-        print(f"Nom : {tournoi.nom}")
-        print(f"Lieu : {tournoi.lieu}")
-        print(f"Date de début : {tournoi.date_debut}")
-        print(f"Date de fin : {tournoi.date_fin}")
-        print(f"Nombre de tours : {tournoi.nombre_tours}")
-        print(f"Tour courant : {tournoi.tour_actuel}")
-        print(f"Description : {tournoi.description}")
-        Rapport.afficher_joueurs(tournoi.joueurs)
+        # print("\n=== Détails du Tournoi ===")
+        # print(f"Nom : {tournoi.nom}")
+        # print(f"Lieu : {tournoi.lieu}")
+        # print(f"Date de début : {tournoi.date_debut}")
+        # print(f"Date de fin : {tournoi.date_fin}")
+        # print(f"Nombre de tours : {tournoi.nombre_tours}")
+        # print(f"Tour courant : {tournoi.tour_actuel}")
+        # print(f"Description : {tournoi.description}")
+
+        console = Console()
+
+        # Texte pour les détails du tournoi
+        details_text = Text()
+        details_text.append(f"Nom : ", style="bold yellow")
+        details_text.append(f"{tournoi.nom}\n", style="cyan")
+
+        details_text.append("Lieu : ", style="bold yellow")
+        details_text.append(f"{tournoi.lieu}\n", style="cyan")
+
+        details_text.append("Date de début : ", style="bold yellow")
+        details_text.append(f"{tournoi.date_debut}\n", style="cyan")
+
+        details_text.append("Date de fin : ", style="bold yellow")
+        details_text.append(f"{tournoi.date_fin}\n", style="cyan")
+
+        details_text.append("Nombre de tours : ", style="bold yellow")
+        details_text.append(f"{tournoi.nombre_tours}\n", style="cyan")
+
+        details_text.append("Tour courant : ", style="bold yellow")
+        details_text.append(f"{tournoi.tour_actuel}\n", style="cyan")
+
+        details_text.append("Description : ", style="bold yellow")
+        details_text.append(f"{tournoi.description}", style="cyan")
+
+        # Créer un panneau pour entourer les détails
+        panel = Panel.fit(
+            details_text,
+            title=f"[bold green]Détails du Tournoi - {tournoi.nom}[/bold green]",
+            border_style="bright_blue",
+            box=box.ROUNDED,
+            padding=(1, 2),
+        )
+
+        # Afficher le panneau avec les détails
+        console.print(panel)
+        Rapport.liste_joueurs(tournoi.joueurs)
 
     @staticmethod
     def afficher_message(message):
@@ -76,35 +192,120 @@ class Rapport:
 
     @staticmethod
     def afficher_classement(tournoi):
-        # Crée une liste des scores à partir du dictionnaire des scores du tournoi
-        classement = sorted(tournoi.joueurs, key=lambda j: tournoi.scores.get(j.identifiant, 0), reverse=True)
+        # # Crée une liste des scores à partir du dictionnaire des scores du tournoi
+        # classement = sorted(tournoi.joueurs, key=lambda j: tournoi.scores.get(j.identifiant, 0), reverse=True)
         
-        Rapport.afficher_message("\n--- Classement du Tournoi ---")
+        # Rapport.afficher_message(f"\n--- Classement du Tournoi {tournoi.nom} ---")
+        # for index, joueur in enumerate(classement, start=1):
+        #     # Récupérer le score à partir du dictionnaire des scores
+        #     score = tournoi.scores.get(joueur.identifiant, 0)
+        #     Rapport.afficher_message(f"{index}. {joueur.prenom} {joueur.nom} - Score: {score}")
+        console = Console()
+
+        # Titre pour le classement du tournoi
+        titre_classement = Text(f"Classement du Tournoi - {tournoi.nom}", style="bold green", justify="center")
+        
+        # Création de la table de classement
+        table_classement = Table(box=box.MINIMAL, expand=True)
+        table_classement.add_column("Position", style="bold magenta", justify="center")
+        table_classement.add_column("Joueur", style="bold yellow", justify="center")
+        table_classement.add_column("Score", style="bold cyan", justify="center")
+
+        # Trier les joueurs selon leur score
+        classement = sorted(tournoi.joueurs, key=lambda j: tournoi.scores.get(j.identifiant, 0), reverse=True)
+
+        # Ajouter chaque joueur et son score dans la table
         for index, joueur in enumerate(classement, start=1):
-            # Récupérer le score à partir du dictionnaire des scores
             score = tournoi.scores.get(joueur.identifiant, 0)
-            Rapport.afficher_message(f"{index}. {joueur.prenom} {joueur.nom} - Score: {score}")
+            table_classement.add_row(
+                f"{index}",  # Position
+                f"{joueur.prenom} {joueur.nom}",  # Nom du joueur
+                f"{score}"  # Score du joueur
+            )
+
+        # Encadrer le tableau dans un panneau avec un titre
+        panel_classement = Panel.fit(
+            table_classement,
+            title=titre_classement,
+            border_style="bright_blue",
+            box=box.ROUNDED,
+            padding=(1, 2)
+        )
+
+        # Afficher le classement
+        console.print(panel_classement)
     
     @staticmethod
     def afficher_tours_et_matchs(tournoi):
-        if not tournoi.tours:
-            print("Aucun tour n'a été enregistré pour ce tournoi.")
-            return
+        # if not tournoi.tours:
+        #     print("Aucun tour n'a été enregistré pour ce tournoi.")
+        #     return
         
-        print(f"\n--- Tours du Tournoi {tournoi.nom} ---")
+        # print(f"\n--- Tours du Tournoi {tournoi.nom} ---")
+        # for tour in tournoi.tours:
+        #     print(f"\nTour {tour.numero}:")
+        #     if not tour.matchs:
+        #         print("Aucun match enregistré pour ce tour.")
+        #     else:
+        #         for match in tour.matchs:
+        #             joueur1 = match.joueur1
+        #             joueur2 = match.joueur2
+        #             print(f"Match: {joueur1.prenom} {joueur1.nom} vs {joueur2.prenom} {joueur2.nom}")
+        #             # Afficher les scores si disponibles
+        #             score_joueur1, score_joueur2 = match.score
+        #             if score_joueur1 is not None and score_joueur2 is not None:
+        #                 print(f"Score: {score_joueur1} - {score_joueur2}")
+        #             else:
+        #                 print("Score: Non enregistré.")
+        console = Console()
+        
+        # Vérifier si des tours existent
+        if not tournoi.tours:
+            console.print("Aucun tour n'a été enregistré pour ce tournoi.", style="bold red")
+            return
+
+        # Titre principal pour les tours du tournoi
+        titre_tournoi = Text(f"Tours du Tournoi - {tournoi.nom}", style="bold green", justify="center")
+        console.print(Panel.fit(titre_tournoi, border_style="bright_blue", box=box.DOUBLE))
+
+        # Boucle à travers chaque tour
         for tour in tournoi.tours:
-            print(f"\nTour {tour.numero}:")
+            titre_tour = Text(f"Tour {tour.numero}", style="bold magenta", justify="center")
+
+            # Vérifier si des matchs existent pour le tour actuel
             if not tour.matchs:
-                print("Aucun match enregistré pour ce tour.")
+                console.print(Panel(f"Aucun match enregistré pour ce tour.", title=titre_tour, border_style="red", box=box.ROUNDED))
             else:
-                for match in tour.matchs:
+                # Créer une table pour les matchs du tour
+                table_matchs = Table(box=box.MINIMAL, expand=True)
+                table_matchs.add_column("Match", style="bold cyan", justify="center")
+                table_matchs.add_column("Joueur 1", style="yellow", justify="center")
+                table_matchs.add_column("Joueur 2", style="yellow", justify="center")
+                table_matchs.add_column("Score", style="bold green", justify="center")
+
+                # Boucle à travers chaque match
+                for i, match in enumerate(tour.matchs, start=1):
                     joueur1 = match.joueur1
                     joueur2 = match.joueur2
-                    print(f"Match: {joueur1.prenom} {joueur1.nom} vs {joueur2.prenom} {joueur2.nom}")
-                    # Afficher les scores si disponibles
+
+                    # Score des joueurs
                     score_joueur1, score_joueur2 = match.score
-                    if score_joueur1 is not None and score_joueur2 is not None:
-                        print(f"Score: {score_joueur1} - {score_joueur2}")
-                    else:
-                        print("Score: Non enregistré.")
-            
+                    score_affiche = f"{score_joueur1} - {score_joueur2}" if score_joueur1 is not None and score_joueur2 is not None else "Non enregistré"
+
+                    # Ajouter une ligne dans la table pour chaque match
+                    table_matchs.add_row(
+                        f"Match {i}",
+                        f"{joueur1.prenom} {joueur1.nom}",
+                        f"{joueur2.prenom} {joueur2.nom}",
+                        score_affiche
+                    )
+
+                # Afficher le panneau du tour avec la table des matchs
+                panel_tour = Panel.fit(
+                    table_matchs,
+                    title=titre_tour,
+                    border_style="bright_blue",
+                    box=box.ROUNDED,
+                    padding=(1, 2)
+                )
+                console.print(panel_tour)
