@@ -8,13 +8,14 @@ Le programme est simple et adaptable, offrant des options pour démarrer un tour
 # Installation
 
 ## Prérequis
-- **Python 3.x**  
-  Téléchargez Python ici : [Python.org](https://www.python.org/)
-
-  Lors de l'installation, cochez la case "Add Python to PATH" pour faciliter l’utilisation de l’invite de commande.
-
-- **Git**  
-  Téléchargez Git ici : [Git-scm.com](https://git-scm.com/)
+- Python 3.x
+```
+https://www.python.org/
+```
+- Git  
+```
+https://git-scm.com/
+```
 
 ## Étapes d'Installation
 1. **Clonez le dépôt du projet**  
