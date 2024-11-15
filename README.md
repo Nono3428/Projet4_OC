@@ -21,7 +21,7 @@ https://git-scm.com/
 1. **Clonez le dépôt du projet**  
 - Ouvrez un terminal/invite de commande, puis exécutez la commande suivante :
    ```
-   git clone https://github.com/votre_utilisateur/gestion-tournoi.git
+   git clone https://github.com/Nono3428/Projet4_OC.git
     ```
 - Créez un environnement virtuel :
     ```
