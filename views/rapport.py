@@ -7,8 +7,9 @@ class Rapport:
 
     @staticmethod
     def afficher_listes_joueurs(joueurs):
+        console = Console()
         if not joueurs:
-            print("Aucun joueur enregistré.")
+            console.print("[bold red]Aucun joueurs enregistré.[/bold red]")
             return
         choix = input("Voulez vous une liste détaillées des joueurs (oui/non): ")
         joueurs_tries = sorted(joueurs, key=lambda joueur: joueur.nom)

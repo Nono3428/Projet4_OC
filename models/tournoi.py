@@ -34,7 +34,7 @@ class Tournoi:
             "nombre_tours": self.nombre_tours,
             "tour_actuel" : self.tour_actuel,
             "tours": [tour.to_dict() for tour in self.tours],
-            "joueurs": [joueur.to_dict_tournoi() for joueur in self.joueurs],
+            "joueurs": [joueur.to_dict() for joueur in self.joueurs],
             "description": self.description,
             "scores": self.scores
         }

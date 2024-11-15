@@ -55,7 +55,7 @@ class Menu:
             ("1", "Ajouter un joueur"),
             ("2", "Afficher les joueurs du tournoi"),
             ("3", "Afficher les détails du tournoi"),
-            ("4", "Démarrer le tournoi"),
+            ("4", "Jouer un tour"),
             ("5", "Afficher les résultats des matchs"),
             ("6", "Modifier la description du tournoi"),
             ("0", "Retour au menu principal")
@@ -86,10 +86,12 @@ class Menu:
             if date_naissance > datetime.now().date():
                 Rapport.afficher_message("Erreur : la date de naissance ne peut pas être postérieure à la date actuelle.")
                 continue
-            identifiant = input("Identifiant national : ")
-            index = joueurs_controller.verifier_id(identifiant)
-            if index == True:
-                break
+            while True:
+                identifiant = input("Identifiant national : ")
+                index = joueurs_controller.verifier_id(identifiant)
+                if index == True:
+                    break
+            break
         date_naissance = date_naissance.strftime("%Y/%m/%d")
         joueurs_controller.ajouter_joueur(nom, prenom, date_naissance, identifiant)
 
@@ -100,11 +102,11 @@ class Menu:
         while True:
             date_debut = joueur_controller.verifier_dates("Date de début (YYYY/MM/DD) : ")
             if date_debut < datetime.now().date():
-                print("Erreur : la date de début ne peut pas être antérieure à la date actuelle.")
+                Rapport.afficher_message("Erreur : la date de début ne peut pas être antérieure à la date actuelle.")
                 continue
             date_fin = joueur_controller.verifier_dates("Date de fin (YYYY/MM/DD) : ")
             if date_fin < date_debut:
-                print("Erreur : la date de fin doit être postérieure à la date de début. Veuillez réessayer.")
+                Rapport.afficher_message("Erreur : la date de fin doit être postérieure à la date de début. Veuillez réessayer.")
             else:
                 break
         date_debut = date_debut.strftime("%Y/%m/%d")
