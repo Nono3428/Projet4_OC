@@ -1,5 +1,5 @@
-from models.joueurs import Joueur
-from models.match import Match
+from .joueurs import Joueur
+from .match import Match
 
 
 class Tour:

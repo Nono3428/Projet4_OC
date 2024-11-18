@@ -1,7 +1,7 @@
 import re
 from datetime import datetime
-from models.joueurs import Joueur
-from views.rapport import Rapport
+from ..models.joueurs import Joueur
+from ..views.rapport import Rapport
 
 
 class JoueursController:

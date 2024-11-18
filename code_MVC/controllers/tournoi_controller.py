@@ -1,8 +1,8 @@
-from models.tournoi import Tournoi
-from models.tour import Tour
-from models.match import Match
-from models.joueurs import Joueur
-from views.rapport import Rapport
+from ..models.tournoi import Tournoi
+from ..models.tour import Tour
+from ..models.match import Match
+from ..models.joueurs import Joueur
+from ..views.rapport import Rapport
 import random
 from rich.console import Console
 from rich.panel import Panel

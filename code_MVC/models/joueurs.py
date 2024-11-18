@@ -1,5 +1,5 @@
 import json
-from views.rapport import Rapport
+from ..views.rapport import Rapport
 
 
 class Joueur:

@@ -1,5 +1,5 @@
 from datetime import datetime
-from views.rapport import Rapport
+from .rapport import Rapport
 from rich.console import Console
 from rich.table import Table
 from rich.panel import Panel

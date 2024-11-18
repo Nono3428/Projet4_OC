@@ -1,7 +1,7 @@
-from controllers.joueurs_controller import JoueursController
-from controllers.tournoi_controller import TournoiController
-from views.menu import Menu
-from views.rapport import Rapport
+from .joueurs_controller import JoueursController
+from .tournoi_controller import TournoiController
+from ..views.menu import Menu
+from ..views.rapport import Rapport
 
 
 class MainController:

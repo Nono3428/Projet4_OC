@@ -1,6 +1,6 @@
-from models.tour import Tour
-from views.rapport import Rapport
-from models.joueurs import Joueur
+from .tour import Tour
+from ..views.rapport import Rapport
+from .joueurs import Joueur
 import json
 
 
