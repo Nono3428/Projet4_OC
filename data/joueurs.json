@@ -1,0 +1,9 @@
+[
+    {
+        "nom": "toto",
+        "prenom": "toto",
+        "date_naissance": "2000/10/10",
+        "identifiant": "AA12345",
+        "tournois_participes": []
+    }
+]
