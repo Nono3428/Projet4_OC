@@ -8,7 +8,7 @@ import rich.box
 class Menu:
     def __init__(self):
         self.options = {
-            "1": "Ajouter joueur",
+            "1": "Créer un nouveau joueur",
             "2": "Liste des joueurs",
             "3": "Créer un nouveau tournoi",
             "4": "Liste des tournois",
@@ -18,20 +18,13 @@ class Menu:
 
     def afficher_menu(self):
         console = Console()
-
-        # Titre principal
+    
         titre = Text("Menu Principal", style="bold cyan", justify="center")
-
-        # Création de la table pour les options
         table = Table(show_header=True, header_style="bold magenta")
         table.add_column("Option", justify="center", style="yellow")
         table.add_column("Action", style="green")
-
-        # Ajout des options dans la table
         for key, action in self.options.items():
             table.add_row(key, action)
-
-        # Affichage du titre et de la table dans un panneau
         panel = Panel.fit(
             table,
             title = titre,
@@ -43,14 +36,10 @@ class Menu:
     def afficher_menu_tournoi(self, tournoi_nom):
         console = Console()
 
-        # Création de la table pour les options avec la bordure correcte
         table = Table(show_header=True, header_style="bold magenta")
-
-        # Ajouter les colonnes dans la table
         table.add_column("Option", justify="center", style="yellow")
         table.add_column("Action", style="green")
 
-        # Options disponibles
         options = [
             ("1", "Ajouter un joueur"),
             ("2", "Afficher les joueurs du tournoi"),
@@ -63,9 +52,7 @@ class Menu:
 
         for option in options:
             table.add_row(option[0], option[1])
-
         titre = Text(f"Menu Tournoi - {tournoi_nom}", style="bold cyan", justify="center")
-
         panel = Panel.fit(
             table,
             title = titre,

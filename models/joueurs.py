@@ -18,16 +18,12 @@ class Joueur:
         })
 
     def mettre_a_jour_points_tournoi(self, tournoi_nom, nouveaux_points):
-        # Recherche le tournoi dans la liste des tournois auxquels le joueur a participé
         for tournoi in self.tournois_participes:
             if tournoi['tournoi'] == tournoi_nom:
-                # Met à jour les points du tournoi en ajoutant les nouveaux points
-                tournoi['points'] += nouveaux_points
-                print(f"Points mis à jour pour le tournoi '{tournoi_nom}' : {tournoi['points']} points")
-            break
-        else:
-            # Si le tournoi n'est pas trouvé, afficher un message d'erreur ou gérer le cas
-            print(f"Le joueur n'est pas inscrit au tournoi '{tournoi_nom}'.")
+                tournoi['points'] = nouveaux_points
+                return
+            else:
+                print(f"Le joueur n'est pas inscrit au tournoi '{tournoi_nom}'.")
 
     def to_dict(self):
         return {
@@ -36,14 +32,6 @@ class Joueur:
             'date_naissance': self.date_naissance,
             'identifiant': self.identifiant,
             'tournois_participes': self.tournois_participes,
-        }
-    
-    def to_dict_tournoi(self):
-        return {
-            'nom': self.nom,
-            'prenom': self.prenom,
-            'date_naissance': self.date_naissance,
-            'identifiant': self.identifiant,
         }
 
     @staticmethod

@@ -18,7 +18,6 @@ class JoueursController:
         Rapport.afficher_message(f"Joueur {nom} {prenom} ajouté avec succès.")
 
     def rechercher_joueur(self, identifiant):
-        """Recherche un joueur par son identifiant national d'échecs."""
         for joueur in self.joueurs:
             if joueur.identifiant == identifiant:
                 return joueur

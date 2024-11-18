@@ -46,10 +46,9 @@ class TournoiController:
         tournoi.ajouter_description()
 
     def demarrer_tournoi(self, tournoi, joueur_controller):
-        """Démarre le tournoi en générant les tours."""
         if len(tournoi.joueurs) >= 6:
             self.generer_tour(tournoi)
-            self.gerer_resultats_tour(tournoi.tours[-1], tournoi, joueur_controller)
+            self.gerer_resultats_tour(tournoi.tours[-1], tournoi)
             tournoi.tour_actuel += 1
             Rapport.afficher_classement(tournoi)
             tournoi.sauvegarder_tournois(self.tournois, self.fichier_tournois)
@@ -58,7 +57,6 @@ class TournoiController:
             Rapport.afficher_message("Il n'y a pas asser de participants pour le tournoi. Minimum de 6 participants pour lancer le tournoi.")
 
     def generer_tour(self, tournoi):
-        """Génère un tour (premier ou suivant) en fonction des scores et des adversaires."""
         tour = Tour(tournoi.tour_actuel + 1)
 
         if tournoi.tour_actuel == 0:
@@ -67,7 +65,6 @@ class TournoiController:
         else:
             Rapport.afficher_message("Génération du tour suivant : tri des joueurs par score.")
             tournoi.joueurs.sort(key=lambda j: tournoi.scores.get(j.identifiant, 0), reverse=True)
-
         paires_deja_jouees = set()
         joueurs_non_appaires = tournoi.joueurs.copy()
 
@@ -78,13 +75,13 @@ class TournoiController:
             for i, joueur2 in enumerate(joueurs_non_appaires):
                 if (joueur1.identifiant, joueur2.identifiant) not in paires_deja_jouees and \
                    (joueur2.identifiant, joueur1.identifiant) not in paires_deja_jouees:
-
+                    
                     # Ajouter la paire à l'ensemble des paires déjà jouées
                     paires_deja_jouees.add((joueur1.identifiant, joueur2.identifiant))
 
                     # Créer et ajouter un match
                     tour.ajouter_match(Match(joueur1, joueur2))
-                    
+
                     # Retirer joueur2 de la liste
                     joueurs_non_appaires.pop(i)
                     break
@@ -101,7 +98,6 @@ class TournoiController:
             joueur1 = match.joueur1
             joueur2 = match.joueur2
 
-            # Table d'affichage du match
             table = Table(title="Détails du Match", expand=True, show_header=True)
             table.add_column("Joueur 1", justify="center", style="bold")
             table.add_column("Contre", justify="center", style="bold")
@@ -109,36 +105,30 @@ class TournoiController:
 
             table.add_row(f"{joueur1.prenom} {joueur1.nom}", "VS", f"{joueur2.prenom} {joueur2.nom}")
             console.print(table)
-            # Gestion du résultat avec une boucle de validation
+
+            # Gestion du résultat
             while True:
                 try:
                     resultat = IntPrompt.ask(f"[yellow]Qui est le vainqueur pour ce match ?[/yellow]\n(1 = {joueur1.nom}, 2 = {joueur2.nom}, 0 = Match nul)")
-                    
-                    # Vérification du choix de l’utilisateur
                     if resultat not in [0, 1, 2]:
                         console.print("[red]Veuillez entrer un choix valide (1, 2 ou 0).[/red]")
                         continue
-
-                    # Mise à jour des scores en fonction du résultat
                     if resultat == 1:
                         tournoi.scores[joueur1.identifiant] = tournoi.scores.get(joueur1.identifiant, 0) + 1
                         tournoi.scores[joueur2.identifiant] = tournoi.scores.get(joueur2.identifiant, 0)
                         match.definir_score(1, 0)
                         console.print(f"[green]{joueur1.nom} {joueur1.prenom} gagne contre {joueur2.nom} {joueur2.prenom}[/green]")
-
                     elif resultat == 2:
                         tournoi.scores[joueur1.identifiant] = tournoi.scores.get(joueur1.identifiant, 0)
                         tournoi.scores[joueur2.identifiant] = tournoi.scores.get(joueur2.identifiant, 0) + 1
                         match.definir_score(0, 1)
                         console.print(f"[green]{joueur2.nom} {joueur2.prenom} gagne contre {joueur1.nom} {joueur1.prenom}[/green]")
-
                     else:  # Match nul
                         tournoi.scores[joueur1.identifiant] = tournoi.scores.get(joueur1.identifiant, 0) + 0.5
                         tournoi.scores[joueur2.identifiant] = tournoi.scores.get(joueur2.identifiant, 0) + 0.5
                         match.definir_score(0.5, 0.5)
                         console.print(f"[blue]Match nul entre {joueur1.nom} {joueur1.prenom} et {joueur2.nom} {joueur2.prenom}[/blue]")
 
-                    # Mettre à jour les points des joueurs
                     joueur1.mettre_a_jour_points_tournoi(tournoi.nom, tournoi.scores[joueur1.identifiant])
                     joueur2.mettre_a_jour_points_tournoi(tournoi.nom, tournoi.scores[joueur2.identifiant])
                     break

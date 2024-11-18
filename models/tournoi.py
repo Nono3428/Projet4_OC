@@ -56,18 +56,16 @@ class Tournoi:
                 joueurs_data = tournoi.get('joueurs', [])
                 tours_data = tournoi.get('tours', [])
                 scores = tournoi.get('scores', {})
-                # Charge les joueurs
                 joueurs = [Joueur(**joueur) for joueur in joueurs_data]
 
-                # Création d'une instance de Tournoi
                 tournoi_instance = (Tournoi(nom, lieu, date_debut, date_fin, description, nombre_tours))
                 tournoi_instance.tour_actuel = tour_actuel
-                tournoi_instance.joueurs = joueurs  # Assigne les joueurs au tournoi
+                tournoi_instance.joueurs = joueurs
                 tournoi_instance.scores = scores 
 
                 for tour_data in tours_data:
-                    tour_instance = Tour(tour_data['numero'])  # Créer une instance de Tour
-                    tour_instance.from_dict(tour_data)  # Remplir l'instance avec les données
+                    tour_instance = Tour(tour_data['numero'])
+                    tour_instance.from_dict(tour_data)
                     tournoi_instance.tours.append(tour_instance)
 
                 tournois.append(tournoi_instance)
