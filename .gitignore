@@ -4,3 +4,4 @@ env
 #Dossier python
  __pycache__/
  *.pyc
+.flake8
