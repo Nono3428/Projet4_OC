@@ -48,10 +48,10 @@ Lancer l'application : Dans le terminal, lancez le programme principal pour acc�
 
 - Gestion du Tournoi :
 
-    -Ajouter des Joueurs : Ajoutez des joueurs en spécifiant leurs informations.
-    -Afficher les Détails : Consultez les informations spécifiques à chaque tournoi.
-    -Démarrer le Tournoi : Lancez le tournoi, gérez les tours et enregistrez les scores des matchs.
-    -Afficher le Classement : Consultez le classement en fonction des scores mis à jour.
+    - Ajouter des Joueurs : Ajoutez des joueurs en spécifiant leurs informations.
+    - Afficher les Détails : Consultez les informations spécifiques à chaque tournoi.
+    - Démarrer le Tournoi : Lancez le tournoi, gérez les tours et enregistrez les scores des matchs.
+    - Afficher le Classement : Consultez le classement en fonction des scores mis à jour.
 
 Exemples de Commandes :
 Créer un joueur
