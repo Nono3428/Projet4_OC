@@ -22,6 +22,10 @@ https://git-scm.com/
 - Ouvrez un terminal/invite de commande, puis exécutez la commande suivante :
    ```
    git clone https://github.com/Nono3428/Projet4_OC.git
+   ```
+- Placez-vous dans le dossier
+    ```
+    cd .\Projet4_OC
     ```
 - Créez un environnement virtuel :
     ```
