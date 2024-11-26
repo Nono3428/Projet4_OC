@@ -70,7 +70,7 @@ class Menu:
         nom = input("Nom du joueur : ")
         prenom = input("Prènom du joueur : ")
         while True:
-            date_naissance = joueurs_controller.verifier_dates("Date de naissance (YYYY/MM/DD) : ")
+            date_naissance = self.verifier_dates("Date de naissance (YYYY/MM/DD) : ")
             if date_naissance > datetime.now().date():
                 Rapport.afficher_message("Erreur : la date de naissance ne peut pas être postérieure"
                                          "à la date actuelle.")
@@ -88,11 +88,11 @@ class Menu:
         nom = input("Nom du tournoi : ")
         lieu = input("Lieu : ")
         while True:
-            date_debut = joueur_controller.verifier_dates("Date de début (YYYY/MM/DD) : ")
+            date_debut = self.verifier_dates("Date de début (YYYY/MM/DD) : ")
             if date_debut < datetime.now().date():
                 Rapport.afficher_message("Erreur : la date de début ne peut pas être antérieure à la date actuelle.")
                 continue
-            date_fin = joueur_controller.verifier_dates("Date de fin (YYYY/MM/DD) : ")
+            date_fin = self.verifier_dates("Date de fin (YYYY/MM/DD) : ")
             if date_fin < date_debut:
                 Rapport.afficher_message("Erreur : la date de fin doit être postérieure à la date de début."
                                          " Veuillez réessayer.")
