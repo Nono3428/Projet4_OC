@@ -1,5 +1,4 @@
 import re
-from datetime import datetime
 from ..models.joueurs import Joueur
 from ..views.rapport import Rapport
 
@@ -31,15 +30,6 @@ class JoueursController:
         for joueur in self.joueurs:
             liste.add(joueur.identifiant)
         return liste
-
-    def verifier_dates(self, string):
-        while True:
-            date = input(string)
-            try:
-                date = datetime.strptime(date, "%Y/%m/%d")
-                return date.date()
-            except ValueError:
-                Rapport.afficher_message("Erreur : Format de date non valide. Format requis : (YYYY/MM/DD)")
 
     def verifier_id(self, identifiant):
         if not re.match("^[A-Za-z]{2}[0-9]{5}$", identifiant):
