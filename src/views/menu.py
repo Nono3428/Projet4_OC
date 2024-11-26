@@ -102,3 +102,12 @@ class Menu:
         date_fin = date_fin.strftime("%Y/%m/%d")
         description = input("Faire une desciption du tournoi : ")
         tournoi_controller.ajouter_tournoi(nom, lieu, date_debut, date_fin, description)
+
+    def verifier_dates(self, string):
+        while True:
+            date = input(string)
+            try:
+                date = datetime.strptime(date, "%Y/%m/%d")
+                return date.date()
+            except ValueError:
+                Rapport.afficher_message("Erreur : Format de date non valide. Format requis : (YYYY/MM/DD)")

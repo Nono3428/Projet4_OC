@@ -1,4 +1,4 @@
-from code_MVC.controllers.main_controller import MainController
+from src.controllers.main_controller import MainController
 
 if __name__ == "__main__":
     # Initialiser le contrôleur principal

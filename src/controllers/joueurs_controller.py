@@ -39,7 +39,7 @@ class JoueursController:
                 date = datetime.strptime(date, "%Y/%m/%d")
                 return date.date()
             except ValueError:
-                print("Erreur : Format de date non valide. Format requis : (YYYY/MM/DD)")
+                Rapport.afficher_message("Erreur : Format de date non valide. Format requis : (YYYY/MM/DD)")
 
     def verifier_id(self, identifiant):
         if not re.match("^[A-Za-z]{2}[0-9]{5}$", identifiant):
