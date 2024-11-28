@@ -41,7 +41,7 @@ https://git-scm.com/
     ```
 - Génération du rapport pour flake8 avec la commande :
     ```
-    flake8 .\code_MVC\ --format=html --htmldir=flake8_rapport
+    flake8 .\src\ --format=html --htmldir=flake8_rapport
     ```
 - Utilisation :
 Lancer l'application : Dans le terminal, lancez le programme principal pour accéder au menu et commencer à utiliser l'application.
