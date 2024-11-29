@@ -65,7 +65,7 @@ class MainController:
                             Rapport.afficher_tours_et_matchs(tournoi)
                             Rapport.afficher_classement(tournoi)
                         elif choix_tournoi == "6":
-                            tournoi.ajouter_description(tournoi)
+                            tournoi.ajouter_description()
                         elif choix_tournoi == "0":
                             break  # Retour au menu principal
                         else:
